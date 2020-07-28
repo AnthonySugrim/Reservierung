@@ -4,7 +4,11 @@ const path = require('path');
 const PORT = process.env.PORT || 3001;
 const app = express();
 const routes = require('./routes');
-
+var cookieParser = require("cookie-parser");
+var logger = require("morgan");
+const cors = require("cors");
+// const availability = require("./routes/availabilityRoute");
+// const reserve = require("./routes/reservationRoute")
 const session = require('express-session');
 const initSession = require('./scripts/initSession');
 
@@ -20,13 +24,20 @@ app.use(initSession(session));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+
+
+
 // Serve static assets (usually on heroku).
 if (process.env.NODE_ENV === 'production') {
 	app.use(express.static('client/build'));
 }
-
+// app.use("/availability", require("./routes/availabilityRoute"));
+// app.use("/reserve", require("./routes/reservationRoute"));
 // API routes.
 app.use(routes);
+// Routes
+
+
 
 // Send every "lost" request to the React app.
 // !Define any API routes before this runs.
@@ -42,6 +53,14 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/passport', {
 	useUnifiedTopology: true,
 	useCreateIndex: true
 });
+
+app.use(cors());
+app.use(logger("dev"));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
+
+
 
 app.listen(PORT, function () {
 	console.log(`\n🌎 ==> API server now on http://localhost:${PORT}\n`);

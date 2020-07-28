@@ -5,17 +5,20 @@ import Login from './pages/Login';
 import Signup from './pages/Signup';
 import NoMatch from './pages/NoMatch';
 import Alert from './components/Alert';
-import Navbar from './containers/Navbar';
+// import Navbar from './containers/Navbar';
 import LoadingSpinner from './components/LoadingSpinner';
 import ProtectedRoute from './components/ProtectedRoute';
 import { user as userAPI } from "./utils/API";
 import './App.css';
+import Main from './components/main';
+import Navbar from './components/navbar';
+import Book from './components/book';
+import Thankyou from './components/thankYou';
 
 function App() {
 	const [user, setUser] = useState({});
 	const [loading, setLoading] = useState(false);
 	const [alertInfo, setAlertInfo] = useState({message:"", theme:"success"});
-
    useEffect(() => {
 		// no catch, add if you want to check for it.
 		// only setting user if we got one, to avoid rerendering the page.
@@ -31,6 +34,23 @@ function App() {
 				} />
 				<LoadingSpinner isLoading={loading} />
 				<Switch>
+					<Route
+						exact
+						path='/home'
+						component={Main}
+					/>
+					<Route
+						exact
+						path='/book'
+						component={Book}
+					/>
+					<Route
+						exact
+						path='/thankyou'
+						component={Thankyou}
+					/>
+	
+				
 					<Route
 						exact
 						path='/'
@@ -58,7 +78,7 @@ function App() {
 							/>
 						}
 						{...{ user, setUser, setLoading, setAlertInfo }} />
-					<ProtectedRoute exact path="/home" {...{user, loading, Component: Home} } />
+					<ProtectedRoute exact path="/main" {...{user, loading, Component: Home} } />
 					<Route component={NoMatch} />
 				</Switch>
 			</Router>
